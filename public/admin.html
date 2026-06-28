@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Toko Saya</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .admin-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .admin-card h3 { margin-bottom: 15px; color: #f0a500; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-primary { background: #f0a500; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-success { background: #2ecc71; color: white; }
+        .product-list { margin-top: 20px; }
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .product-item .name { font-weight: 600; }
+        .product-item .price { color: #f0a500; }
+        .promo-list { margin-top: 20px; }
+        .promo-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .status-active { color: #2ecc71; }
+        .status-inactive { color: #e74c3c; }
+    </style>
+</head>
+<body style="background: #0a0a2e; color: white;">
+
+<div class="admin-container">
+    <h1>👑 Admin Panel</h1>
+    <p style="color: #888; margin-bottom: 20px;">Kelola produk, promo, dan transaksi</p>
+
+    <!-- Tambah Produk -->
+    <div class="admin-card">
+        <h3><i class="fas fa-plus-circle"></i> Tambah Produk</h3>
+        <div class="form-group">
+            <label>Nama Produk</label>
+            <input type="text" id="productName" placeholder="Contoh: Panel Pterodactyl">
+        </div>
+        <div class="form-group">
+            <label>Kategori</label>
+            <input type="text" id="productCategory" placeholder="Contoh: Hosting">
+        </div>
+        <div class="form-group">
+            <label>Harga (Rp)</label>
+            <input type="number" id="productPrice" placeholder="Contoh: 50000">
+        </div>
+        <div class="form-group">
+            <label>Icon (Font Awesome)</label>
+            <input type="text" id="productIcon" placeholder="Contoh: fa-server" value="fa-box">
+        </div>
+        <div class="form-group">
+            <label>Deskripsi</label>
+            <input type="text" id="productDescription" placeholder="Deskripsi produk">
+        </div>
+        <button class="btn btn-success" onclick="addProduct()"><i class="fas fa-save"></i> Simpan Produk</button>
+        <div id="productResult" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- Daftar Produk -->
+    <div class="admin-card">
+        <h3><i class="fas fa-list"></i> Daftar Produk</h3>
+        <div id="productList" class="product-list">
+            <p style="color:#888;">Memuat produk...</p>
+        </div>
+    </div>
+
+    <!-- Tambah Promo -->
+    <div class="admin-card">
+        <h3><i class="fas fa-ticket-alt"></i> Buat Kode Promo</h3>
+        <div class="form-group">
+            <label>Kode Promo</label>
+            <input type="text" id="promoCode" placeholder="Contoh: DISKON10">
+        </div>
+        <div class="form-group">
+            <label>Diskon (%)</label>
+            <input type="number" id="promoDiscount" placeholder="Contoh: 10">
+        </div>
+        <div class="form-group">
+            <label>Deskripsi</label>
+            <input type="text" id="promoDesc" placeholder="Contoh: Diskon 10% untuk semua produk">
+        </div>
+        <button class="btn btn-primary" onclick="addPromo()"><i class="fas fa-plus"></i> Buat Promo</button>
+        <div id="promoResult" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- Daftar Promo -->
+    <div class="admin-card">
+        <h3><i class="fas fa-list"></i> Daftar Promo</h3>
+        <div id="promoList" class="promo-list">
+            <p style="color:#888;">Memuat promo...</p>
+        </div>
+    </div>
+
+    <!-- Top Up Manual -->
+    <div class="admin-card">
+        <h3><i class="fas fa-wallet"></i> Top Up Saldo User</h3>
+        <div class="form-group">
+            <label>User ID</label>
+            <input type="text" id="topupUserId" placeholder="ID user">
+        </div>
+        <div class="form-group">
+            <label>Nominal</label>
+            <input type="number" id="topupAmount" placeholder="Contoh: 50000">
+        </div>
+        <button class="btn btn-primary" onclick="manualTopup()"><i class="fas fa-plus-circle"></i> Top Up</button>
+        <div id="topupResult" style="margin-top:10px;"></div>
+    </div>
+
+    <br>
+    <button class="btn btn-danger" onclick="location.href='index.html'"><i class="fas fa-arrow-left"></i> Kembali ke Toko</button>
+</div>
+
+<script>
+    // ============================================
+    // FUNGSI ADMIN
+    // ============================================
+
+    // Tambah produk
+    async function addProduct() {
+        const name = document.getElementById('productName').value;
+        const category = document.getElementById('productCategory').value;
+        const price = document.getElementById('productPrice').value;
+        const icon = document.getElementById('productIcon').value || 'fa-box';
+        const description = document.getElementById('productDescription').value;
+
+        if (!name || !price) {
+            document.getElementById('productResult').innerHTML = '❌ Nama dan harga wajib diisi!';
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, category, price: parseInt(price), icon, description })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                document.getElementById('productResult').innerHTML = `✅ ${data.message}`;
+                document.getElementById('productName').value = '';
+                document.getElementById('productCategory').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productDescription').value = '';
+                loadProducts();
+            } else {
+                document.getElementById('productResult').innerHTML = `❌ ${data.message}`;
+            }
+        } catch (error) {
+            document.getElementById('productResult').innerHTML = `❌ Error: ${error.message}`;
+        }
+    }
+
+    // Load produk
+    async function loadProducts() {
+        try {
+            const res = await fetch('/api/products');
+            const data = await res.json();
+            
+            if (data.success && data.products.length > 0) {
+                document.getElementById('productList').innerHTML = data.products.map(p => `
+                    <div class="product-item">
+                        <div>
+                            <span class="name"><i class="${p.icon || 'fa-box'}"></i> ${p.name}</span>
+                            <span style="color:#888; font-size:0.8rem; margin-left:10px;">${p.category || 'Lainnya'}</span>
+                        </div>
+                        <div>
+                            <span class="price">Rp ${p.price.toLocaleString('id-ID')}</span>
+                            <button class="btn btn-danger" style="padding:5px 10px; margin-left:10px; font-size:0.7rem;" onclick="deleteProduct(${p.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('productList').innerHTML = '<p style="color:#888;">Belum ada produk.</p>';
+            }
+        } catch (error) {
+            document.getElementById('productList').innerHTML = '<p style="color:#e74c3c;">Gagal memuat produk</p>';
+        }
+    }
+
+    // Hapus produk
+    async function deleteProduct(id) {
+        if (!confirm('Yakin hapus produk ini?')) return;
+        try {
+            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+                loadProducts();
+            }
+        } catch (error) {
+            alert('Gagal hapus produk');
+        }
+    }
+
+    // Tambah promo
+    async function addPromo() {
+        const code = document.getElementById('promoCode').value;
+        const discount = document.getElementById('promoDiscount').value;
+        const description = document.getElementById('promoDesc').value;
+
+        if (!code || !discount) {
+            document.getElementById('promoResult').innerHTML = '❌ Kode dan diskon wajib diisi!';
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/promo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, discount: parseInt(discount), description })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                document.getElementById('promoResult').innerHTML = `✅ ${data.message}`;
+                document.getElementById('promoCode').value = '';
+                document.getElementById('promoDiscount').value = '';
+                document.getElementById('promoDesc').value = '';
+                loadPromos();
+            } else {
+                document.getElementById('promoResult').innerHTML = `❌ ${data.message}`;
+            }
+        } catch (error) {
+            document.getElementById('promoResult').innerHTML = `❌ Error: ${error.message}`;
+        }
+    }
+
+    // Load promo
+    async function loadPromos() {
+        try {
+            const res = await fetch('/api/promo');
+            const data = await res.json();
+            
+            if (data.success && data.promos.length > 0) {
+                document.getElementById('promoList').innerHTML = data.promos.map(p => `
+                    <div class="promo-item">
+                        <div>
+                            <span style="font-weight:700; color:#f0a500;">${p.code}</span>
+                            <span style="color:#888; margin-left:10px;">${p.discount}%</span>
+                            <span style="color:#888; font-size:0.8rem; margin-left:10px;">${p.description}</span>
+                        </div>
+                        <div>
+                            <span class="${p.active ? 'status-active' : 'status-inactive'}">${p.active ? '✅ Aktif' : '❌ Nonaktif'}</span>
+                            <button class="btn btn-danger" style="padding:5px 10px; margin-left:10px; font-size:0.7rem;" onclick="deletePromo('${p.code}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('promoList').innerHTML = '<p style="color:#888;">Belum ada promo.</p>';
+            }
+        } catch (error) {
+            document.getElementById('promoList').innerHTML = '<p style="color:#e74c3c;">Gagal memuat promo</p>';
+        }
+    }
+
+    // Hapus promo
+    async function deletePromo(code) {
+        if (!confirm(`Yakin hapus promo ${code}?`)) return;
+        try {
+            const res = await fetch('/api/promo', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+            const data = await res.json();
+            if (data.success) {
+                loadPromos();
+            }
+        } catch (error) {
+            alert('Gagal hapus promo');
+        }
+    }
+
+    // Manual topup
+    async function manualTopup() {
+        const userId = document.getElementById('topupUserId').value;
+        const amount = document.getElementById('topupAmount').value;
+
+        if (!userId || !amount) {
+            document.getElementById('topupResult').innerHTML = '❌ User ID dan nominal wajib diisi!';
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/topup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, amount: parseInt(amount) })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                document.getElementById('topupResult').innerHTML = `
+                    ✅ Top up berhasil!<br>
+                    Saldo baru: Rp ${data.new_balance.toLocaleString('id-ID')}
+                `;
+                document.getElementById('topupUserId').value = '';
+                document.getElementById('topupAmount').value = '';
+            } else {
+                document.getElementById('topupResult').innerHTML = `❌ ${data.message}`;
+            }
+        } catch (error) {
+            document.getElementById('topupResult').innerHTML = `❌ Error: ${error.message}`;
+        }
+    }
+
+    // Load data saat halaman dibuka
+    loadProducts();
+    loadPromos();
+</script>
+
+</body>
+</html>
