@@ -3,75 +3,697 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toko Saya - Marketplace</title>
+    <title>Toko Saya - Marketplace Digital</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <div class="container">
-            <div class="header-top">
-                <h1>🛒 Toko Saya</h1>
-                <div class="header-actions">
-                    <span id="userDisplay">👤 Guest</span>
-                    <button id="loginBtn" class="btn-secondary">Login</button>
-                </div>
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="container">
+        <div class="header-top">
+            <div class="logo">
+                <h1>🛒 <span>Toko</span>Saya</h1>
+                <p>Marketplace Digital</p>
+            </div>
+            <div class="header-actions">
+                <button id="cartBtn" class="btn-secondary">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartBadge">0</span>
+                </button>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- MAIN -->
-    <main class="container">
-        <!-- Promo Banner -->
-        <div id="promoBanner" class="promo-banner">
-            <div class="promo-content">
-                <i class="fas fa-tags"></i>
-                <div>
-                    <h3 id="promoTitle">Promo Spesial!</h3>
-                    <p id="promoDesc">Gunakan kode promo untuk diskon</p>
-                </div>
-                <div class="promo-code-box">
-                    <span id="promoCode">PROMO10</span>
-                    <button id="copyPromoBtn"><i class="fas fa-copy"></i></button>
+<!-- ========== HERO ========== -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2>Belanja <span>Produk Digital</span> dengan Mudah</h2>
+                <p>Scan QRIS, bayar, dan produk langsung dikirim ke email Anda!</p>
+                <div class="hero-stats">
+                    <div><span id="totalProducts">0</span> Produk</div>
+                    <div><span>⭐ 4.9</span> Rating</div>
+                    <div><span>1.2K+</span> Pelanggan</div>
                 </div>
             </div>
+            <div class="hero-image">
+                <i class="fas fa-rocket"></i>
+            </div>
         </div>
+    </div>
+</section>
 
-        <!-- Products -->
+<!-- ========== PROMO BANNER ========== -->
+<div id="promoBanner" class="promo-banner">
+    <div class="container">
+        <div class="promo-content">
+            <i class="fas fa-tags"></i>
+            <div>
+                <h3 id="promoTitle">Promo Spesial!</h3>
+                <p id="promoDesc">Gunakan kode promo untuk diskon</p>
+            </div>
+            <div class="promo-code-box">
+                <span id="promoCode">DISKON10</span>
+                <button id="copyPromoBtn"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== PRODUCTS ========== -->
+<main class="container">
+    <div class="section-header">
         <h2 class="section-title">📦 Produk Kami</h2>
-        <div id="productsContainer" class="products-grid">
-            <div class="loading">Memuat produk...</div>
+        <div class="section-filter">
+            <input type="text" id="searchInput" placeholder="Cari produk...">
         </div>
+    </div>
+    
+    <div id="productsContainer" class="products-grid">
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Memuat produk...
+        </div>
+    </div>
 
-        <!-- Promo Form -->
-        <div class="promo-form">
-            <h3>🎟️ Punya Kode Promo?</h3>
+    <!-- ========== PROMO FORM ========== -->
+    <div class="promo-form">
+        <div class="promo-form-inner">
+            <div>
+                <h3><i class="fas fa-ticket-alt"></i> Punya Kode Promo?</h3>
+                <p>Masukkan kode promo untuk mendapatkan diskon!</p>
+            </div>
             <div class="promo-input-group">
-                <input type="text" id="promoInput" placeholder="Masukkan kode promo...">
+                <input type="text" id="promoInput" placeholder="Contoh: DISKON10">
                 <button id="applyPromoBtn" class="btn-primary">Gunakan</button>
             </div>
             <div id="promoResult"></div>
         </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Toko Saya. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <!-- BOTTOM NAV -->
-    <div class="bottom-nav">
-        <a href="#" class="nav-item active"><i class="fas fa-home"></i> Beranda</a>
-        <a href="#" class="nav-item"><i class="fas fa-search"></i> Cari</a>
-        <a href="#" class="nav-item"><i class="fas fa-shopping-cart"></i> Keranjang <span class="badge" id="cartBadge">0</span></a>
-        <a href="admin.html" class="nav-item"><i class="fas fa-user-cog"></i> Admin</a>
     </div>
+</main>
 
-    <script src="js/config.js"></script>
-    <script src="js/main.js"></script>
+<!-- ========== MODAL CHECKOUT ========== -->
+<div class="modal" id="checkoutModal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeCheckout">&times;</span>
+        <div class="modal-header">
+            <h2>🛒 Checkout</h2>
+            <p id="checkoutProduct">Produk: <strong></strong></p>
+        </div>
+        
+        <div class="checkout-details">
+            <div class="checkout-row">
+                <span>Harga Produk</span>
+                <span id="checkoutPrice">Rp 0</span>
+            </div>
+            <div class="checkout-row" id="discountRow" style="display:none;">
+                <span>Diskon <span id="discountCodeBadge"></span></span>
+                <span id="discountAmount" style="color:#2ecc71;">-Rp 0</span>
+            </div>
+            <div class="checkout-row total">
+                <span><strong>Total Pembayaran</strong></span>
+                <span id="checkoutTotal" style="color:#f0a500; font-size:1.4rem;">Rp 0</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>📧 Email untuk Kirim Produk</label>
+            <input type="email" id="customerEmail" placeholder="email@example.com" required>
+        </div>
+
+        <button id="payNowBtn" class="btn-primary btn-large">
+            <i class="fas fa-qrcode"></i> Bayar dengan QRIS
+        </button>
+
+        <div id="qrisContainer" style="display:none; text-align:center; margin-top:20px;">
+            <img id="qrisImage" src="" alt="QRIS" style="max-width:280px; border-radius:16px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);">
+            <p style="margin-top:10px; color:#888;">Scan QRIS untuk menyelesaikan pembayaran</p>
+            <p style="font-weight:700; color:#f0a500; font-size:1.2rem;" id="qrisAmount">Rp 0</p>
+            <p style="font-size:0.8rem; color:#666;" id="qrisExpired"></p>
+            <button id="checkPaymentBtn" class="btn-secondary" style="margin-top:10px;">
+                <i class="fas fa-sync"></i> Cek Status Pembayaran
+            </button>
+            <div id="paymentStatus" style="margin-top:10px; font-weight:600;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL CART ========== -->
+<div class="modal" id="cartModal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeCart">&times;</span>
+        <h2><i class="fas fa-shopping-cart"></i> Riwayat Pembelian</h2>
+        <div id="cartItems">
+            <p style="color:#888;">Belum ada pembelian</p>
+        </div>
+    </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>🛒 TokoSaya</h3>
+                <p>Marketplace produk digital terpercaya</p>
+            </div>
+            <div class="footer-section">
+                <h3>Kontak</h3>
+                <p><i class="fas fa-envelope"></i> toko@email.com</p>
+                <p><i class="fab fa-whatsapp"></i> 6281234567890</p>
+            </div>
+            <div class="footer-section">
+                <h3>Ikuti Kami</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 TokoSaya. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- ========== BOTTOM NAV ========== -->
+<div class="bottom-nav">
+    <a href="#" class="nav-item active" id="navHome">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+    </a>
+    <a href="#" class="nav-item" id="navAdmin">
+        <i class="fas fa-user-cog"></i>
+        <span>Admin</span>
+    </a>
+</div>
+
+<script>
+// ============================================
+// MAIN.JS - SEMUA LOGIKA
+// ============================================
+
+// ============================================
+// STATE
+// ============================================
+let products = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let selectedProduct = null;
+let appliedPromo = null;
+let currentTransaction = null;
+let paymentInterval = null;
+
+// ============================================
+// DOM REFS
+// ============================================
+const productsContainer = document.getElementById('productsContainer');
+const cartBadge = document.getElementById('cartBadge');
+const cartBtn = document.getElementById('cartBtn');
+const cartModal = document.getElementById('cartModal');
+const closeCart = document.getElementById('closeCart');
+const cartItems = document.getElementById('cartItems');
+const searchInput = document.getElementById('searchInput');
+const promoInput = document.getElementById('promoInput');
+const applyPromoBtn = document.getElementById('applyPromoBtn');
+const promoResult = document.getElementById('promoResult');
+const checkoutModal = document.getElementById('checkoutModal');
+const closeCheckout = document.getElementById('closeCheckout');
+const checkoutProduct = document.getElementById('checkoutProduct');
+const checkoutPrice = document.getElementById('checkoutPrice');
+const checkoutTotal = document.getElementById('checkoutTotal');
+const customerEmail = document.getElementById('customerEmail');
+const payNowBtn = document.getElementById('payNowBtn');
+const qrisContainer = document.getElementById('qrisContainer');
+const qrisImage = document.getElementById('qrisImage');
+const qrisAmount = document.getElementById('qrisAmount');
+const qrisExpired = document.getElementById('qrisExpired');
+const checkPaymentBtn = document.getElementById('checkPaymentBtn');
+const paymentStatus = document.getElementById('paymentStatus');
+const totalProductsSpan = document.getElementById('totalProducts');
+
+// ============================================
+// LOAD PRODUCTS
+// ============================================
+async function loadProducts() {
+    try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        
+        if (data.success) {
+            products = data.products;
+            totalProductsSpan.textContent = products.length;
+            renderProducts(products);
+        } else {
+            productsContainer.innerHTML = '<div class="loading">❌ Gagal memuat produk</div>';
+        }
+    } catch (error) {
+        productsContainer.innerHTML = '<div class="loading">❌ Error: Gagal koneksi ke server</div>';
+        console.error('Error:', error);
+    }
+}
+
+// ============================================
+// RENDER PRODUCTS
+// ============================================
+function renderProducts(productList) {
+    if (!productList || productList.length === 0) {
+        productsContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <h3>Belum Ada Produk</h3>
+                <p>Admin akan segera menambahkan produk</p>
+            </div>
+        `;
+        return;
+    }
+    
+    productsContainer.innerHTML = productList.map(p => `
+        <div class="product-card" onclick="openCheckout(${p.id})">
+            <div class="product-icon">
+                <i class="${p.icon || 'fa-box'}"></i>
+            </div>
+            <div class="product-info">
+                <h4>${p.name}</h4>
+                <div class="product-meta">
+                    <span class="category">${p.category || 'Lainnya'}</span>
+                    <span class="price">Rp ${(p.price || 0).toLocaleString('id-ID')}</span>
+                </div>
+                <button class="btn-buy">Beli Sekarang</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================
+// SEARCH PRODUCTS
+// ============================================
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = products.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        (p.category && p.category.toLowerCase().includes(query))
+    );
+    renderProducts(filtered);
+});
+
+// ============================================
+// PROMO VALIDASI
+// ============================================
+applyPromoBtn.addEventListener('click', async () => {
+    const code = promoInput.value.trim();
+    if (!code) {
+        promoResult.innerHTML = '❌ Masukkan kode promo!';
+        promoResult.style.color = '#e74c3c';
+        return;
+    }
+    
+    try {
+        const res = await fetch('/api/promo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+        
+        if (data.valid) {
+            appliedPromo = data;
+            promoResult.innerHTML = `✅ ${data.message}`;
+            promoResult.style.color = '#2ecc71';
+            
+            // Update harga di checkout jika ada
+            if (selectedProduct) {
+                updateCheckoutPrice();
+            }
+        } else {
+            appliedPromo = null;
+            promoResult.innerHTML = `❌ ${data.message}`;
+            promoResult.style.color = '#e74c3c';
+        }
+    } catch (error) {
+        promoResult.innerHTML = '❌ Error validasi promo';
+        promoResult.style.color = '#e74c3c';
+        console.error(error);
+    }
+});
+
+// ============================================
+// COPY PROMO CODE
+// ============================================
+document.getElementById('copyPromoBtn').addEventListener('click', () => {
+    const code = document.getElementById('promoCode').textContent;
+    navigator.clipboard.writeText(code);
+    alert('✅ Kode promo disalin!');
+});
+
+// ============================================
+// OPEN CHECKOUT
+// ============================================
+function openCheckout(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    selectedProduct = product;
+    
+    // Reset promo
+    appliedPromo = null;
+    promoInput.value = '';
+    promoResult.innerHTML = '';
+    
+    // Tampilkan modal
+    checkoutProduct.innerHTML = `<strong>${product.name}</strong>`;
+    checkoutPrice.textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+    checkoutTotal.textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+    document.getElementById('discountRow').style.display = 'none';
+    
+    checkoutModal.style.display = 'flex';
+    qrisContainer.style.display = 'none';
+    paymentStatus.innerHTML = '';
+    paymentStatus.style.color = '';
+    
+    // Reset email
+    customerEmail.value = '';
+    
+    // Reset button
+    payNowBtn.disabled = false;
+    payNowBtn.innerHTML = '<i class="fas fa-qrcode"></i> Bayar dengan QRIS';
+    
+    // Clear interval jika ada
+    if (paymentInterval) {
+        clearInterval(paymentInterval);
+        paymentInterval = null;
+    }
+}
+
+function updateCheckoutPrice() {
+    if (!selectedProduct) return;
+    
+    let finalPrice = selectedProduct.price;
+    let discountAmount = 0;
+    let discountRow = document.getElementById('discountRow');
+    let discountCodeBadge = document.getElementById('discountCodeBadge');
+    let discountAmountSpan = document.getElementById('discountAmount');
+    
+    if (appliedPromo && appliedPromo.valid) {
+        discountAmount = (selectedProduct.price * appliedPromo.discount) / 100;
+        finalPrice = selectedProduct.price - discountAmount;
+        
+        discountRow.style.display = 'flex';
+        discountCodeBadge.textContent = `(${appliedPromo.code})`;
+        discountAmountSpan.textContent = `-Rp ${discountAmount.toLocaleString('id-ID')}`;
+    } else {
+        discountRow.style.display = 'none';
+    }
+    
+    checkoutTotal.textContent = `Rp ${finalPrice.toLocaleString('id-ID')}`;
+    checkoutTotal.style.color = '#f0a500';
+}
+
+// ============================================
+// PAY NOW (QRIS)
+// ============================================
+payNowBtn.addEventListener('click', async () => {
+    const email = customerEmail.value.trim();
+    if (!email) {
+        alert('📧 Masukkan email untuk pengiriman produk!');
+        customerEmail.focus();
+        return;
+    }
+    
+    if (!selectedProduct) return;
+    
+    // Validasi email
+    if (!email.includes('@') || !email.includes('.')) {
+        alert('📧 Email tidak valid!');
+        customerEmail.focus();
+        return;
+    }
+    
+    // Hitung final price dengan promo
+    let finalPrice = selectedProduct.price;
+    let promoCode = null;
+    let promoDiscount = null;
+    
+    if (appliedPromo && appliedPromo.valid) {
+        promoCode = appliedPromo.code;
+        promoDiscount = appliedPromo.discount;
+        finalPrice = selectedProduct.price - ((selectedProduct.price * promoDiscount) / 100);
+    }
+    
+    try {
+        payNowBtn.disabled = true;
+        payNowBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuat QRIS...';
+        
+        const res = await fetch('/api/topup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                productId: selectedProduct.id,
+                productName: selectedProduct.name,
+                price: finalPrice,
+                email: email,
+                promoCode: promoCode,
+                promoDiscount: promoDiscount
+            })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            currentTransaction = data;
+            
+            // Tampilkan QRIS
+            qrisContainer.style.display = 'block';
+            qrisImage.src = data.qr_image;
+            qrisAmount.textContent = `Rp ${data.amount.toLocaleString('id-ID')}`;
+            qrisExpired.textContent = `⏳ Berlaku hingga: ${new Date(data.expired_at).toLocaleString('id-ID')}`;
+            paymentStatus.innerHTML = '⏳ Menunggu pembayaran...';
+            paymentStatus.style.color = '#f0a500';
+            
+            // Simpan ke riwayat
+            cart.push({
+                productId: selectedProduct.id,
+                productName: selectedProduct.name,
+                price: data.amount,
+                originalPrice: selectedProduct.price,
+                transactionId: data.transaction_id,
+                email: email,
+                date: new Date().toISOString(),
+                status: 'pending',
+                qrImage: data.qr_image
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+            
+            payNowBtn.innerHTML = '<i class="fas fa-check-circle"></i> QRIS Siap!';
+            
+            // Auto cek status tiap 5 detik
+            if (paymentInterval) {
+                clearInterval(paymentInterval);
+            }
+            paymentInterval = setInterval(async () => {
+                await checkPaymentStatus(data.transaction_id);
+            }, 5000);
+            
+        } else {
+            alert('❌ Gagal membuat QRIS: ' + (data.message || 'Unknown error'));
+            payNowBtn.disabled = false;
+            payNowBtn.innerHTML = '<i class="fas fa-qrcode"></i> Bayar dengan QRIS';
+        }
+        
+    } catch (error) {
+        alert('❌ Error: ' + error.message);
+        payNowBtn.disabled = false;
+        payNowBtn.innerHTML = '<i class="fas fa-qrcode"></i> Bayar dengan QRIS';
+        console.error(error);
+    }
+});
+
+// ============================================
+// CEK STATUS PEMBAYARAN
+// ============================================
+checkPaymentBtn.addEventListener('click', async () => {
+    if (!currentTransaction) return;
+    await checkPaymentStatus(currentTransaction.transaction_id);
+});
+
+async function checkPaymentStatus(transactionId) {
+    try {
+        const res = await fetch(`/api/topup?transaction_id=${transactionId}`);
+        const data = await res.json();
+        
+        if (data.success) {
+            const status = data.transaction.status;
+            
+            if (status === 'completed' || status === 'paid') {
+                paymentStatus.innerHTML = '✅ Pembayaran BERHASIL! Produk akan dikirim ke email Anda.';
+                paymentStatus.style.color = '#2ecc71';
+                
+                // Kirim email
+                await sendEmail(
+                    data.transaction.email,
+                    data.transaction.productName,
+                    data.transaction.price,
+                    data.transaction.id,
+                    data.transaction.qrCode
+                );
+                
+                // Update riwayat
+                const cartItem = cart.find(c => c.transactionId === transactionId);
+                if (cartItem) {
+                    cartItem.status = 'completed';
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartBadge();
+                }
+                
+                payNowBtn.disabled = false;
+                payNowBtn.innerHTML = '<i class="fas fa-check-circle"></i> Selesai!';
+                
+                // Hentikan auto check
+                if (paymentInterval) {
+                    clearInterval(paymentInterval);
+                    paymentInterval = null;
+                }
+                
+            } else if (status === 'failed' || status === 'expired') {
+                paymentStatus.innerHTML = '❌ Pembayaran gagal/expired. Silakan coba lagi.';
+                paymentStatus.style.color = '#e74c3c';
+                
+                if (paymentInterval) {
+                    clearInterval(paymentInterval);
+                    paymentInterval = null;
+                }
+                payNowBtn.disabled = false;
+                payNowBtn.innerHTML = '<i class="fas fa-qrcode"></i> Bayar dengan QRIS';
+            } else {
+                // Status masih pending
+                paymentStatus.innerHTML = '⏳ Menunggu pembayaran... (Auto check tiap 5 detik)';
+                paymentStatus.style.color = '#f0a500';
+            }
+        }
+    } catch (error) {
+        console.error('Check status error:', error);
+        paymentStatus.innerHTML = '⚠️ Gagal cek status, coba manual nanti.';
+        paymentStatus.style.color = '#e67e22';
+    }
+}
+
+// ============================================
+// SEND EMAIL (Invoice)
+// ============================================
+async function sendEmail(email, productName, price, transactionId, qrImage) {
+    try {
+        const res = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: email,
+                productName: productName,
+                price: price,
+                transactionId: transactionId,
+                qrImage: qrImage
+            })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            console.log('✅ Email invoice terkirim!');
+        } else {
+            console.warn('⚠️ Email gagal terkirim:', data.message);
+        }
+    } catch (error) {
+        console.error('Email error:', error);
+    }
+}
+
+// ============================================
+// CART / RIWAYAT
+// ============================================
+function updateCartBadge() {
+    const pending = cart.filter(c => c.status === 'pending').length;
+    cartBadge.textContent = pending;
+}
+
+cartBtn.addEventListener('click', () => {
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="color:#888;">Belum ada pembelian</p>';
+    } else {
+        cartItems.innerHTML = cart.map((item, index) => `
+            <div class="cart-item" style="background:rgba(255,255,255,0.05); padding:12px; border-radius:8px; margin-bottom:10px; border-left:4px solid ${item.status === 'completed' ? '#2ecc71' : '#f0a500'};">
+                <div style="display:flex; justify-content:space-between;">
+                    <div>
+                        <div style="font-weight:600;">${item.productName}</div>
+                        <div style="font-size:0.8rem; color:#888;">${new Date(item.date).toLocaleString('id-ID')}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color:#f0a500; font-weight:700;">Rp ${item.price.toLocaleString('id-ID')}</div>
+                        <div style="font-size:0.7rem; ${item.status === 'completed' ? 'color:#2ecc71;' : 'color:#f0a500;'}">
+                            ${item.status === 'completed' ? '✅ Selesai' : '⏳ Pending'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    cartModal.style.display = 'flex';
+});
+
+closeCart.addEventListener('click', () => {
+    cartModal.style.display = 'none';
+});
+
+// ============================================
+// ADMIN NAV
+// ============================================
+document.getElementById('navAdmin').addEventListener('click', (e) => {
+    e.preventDefault();
+    const password = prompt('🔐 Masukkan password admin:');
+    if (password === 'admin123') {
+        window.location.href = '/admin.html';
+    } else if (password !== null) {
+        alert('❌ Password salah!');
+    }
+});
+
+// ============================================
+// CLOSE MODALS
+// ============================================
+closeCheckout.addEventListener('click', () => {
+    checkoutModal.style.display = 'none';
+    if (paymentInterval) {
+        clearInterval(paymentInterval);
+        paymentInterval = null;
+    }
+});
+
+// Tutup modal jika klik di luar
+window.addEventListener('click', (e) => {
+    if (e.target === checkoutModal) {
+        checkoutModal.style.display = 'none';
+        if (paymentInterval) {
+            clearInterval(paymentInterval);
+            paymentInterval = null;
+        }
+    }
+    if (e.target === cartModal) {
+        cartModal.style.display = 'none';
+    }
+});
+
+// ============================================
+// INIT
+// ============================================
+loadProducts();
+updateCartBadge();
+
+// Refresh produk setiap 30 detik
+setInterval(() => {
+    loadProducts();
+}, 30000);
+</script>
+
 </body>
 </html>
